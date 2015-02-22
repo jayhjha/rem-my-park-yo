@@ -14,12 +14,14 @@ var TIME_INTERVAL = 30000,
     userModel
 
 db.once('open', function(callback) {
+    console.log("setting up database");
     setupDB();
 });
 
 function setupDB() {
     userSchema = mongoose.Schema({
         username : String,
+        location : String,
         time : {type : Date, default : Date.now}
     })
     userModel = mongoose.model('userModel', userSchema)
@@ -40,17 +42,21 @@ app.get('/help', function(req, res) {
 // Subdomain to be used as a callback for Yo.
 app.get('/yo', function(req, res) {
     username = req.query.username;
+    location = req.query.location;
     console.log("Yo received from " + username);
     res.send("Received a Yo from " + username);
-    writeToDb(username);
+    writeToDb(username, location);
 });
 
 
-function sendYo(yoUsername) {
+function sendYo(yoUsername, location) {
+    if (location)
+        location = location.replace(";",",");
+
     request.post('http://api.justyo.co/yo/',
         { form: { 'api_token': API_KEY,
               'username': yoUsername,
-              'link': 'http://google.com' } },
+              'link': 'https://www.google.com/maps/search/'+location } },
         function(error, response, body) {
             if (!error && response.statusCode == 200) {
                 console.log("Yo sent to  " + yoUsername);
@@ -63,11 +69,11 @@ function sendYo(yoUsername) {
 
 
 
-function writeToDb(yoUsername) {
-    var user = new userModel({ username : yoUsername });
+function writeToDb(yoUsername, yoLocation) {
+    var user = new userModel({ username : yoUsername, location : yoLocation });
     user.save(function(err, user) {
         if (err)
-            return console.error(error);
+            return console.error(err);
         console.log("User successfully added to database");
     });
 }
@@ -79,8 +85,6 @@ function removeFromDb(yoUsername) {
         if (err) console.log(err);
         console.log("User deleted is = " + user);
     });
-    
-    clearInterval(intVar);
 }
 
 
@@ -90,7 +94,7 @@ function getInfoFromDb() {
         if (err) console.log(err);
         for (i = 0; i < user.length; i++) {
             if(isTimeUp(user[i].time)) {
-                sendYo(user[i].username);
+                sendYo(user[i].username, user[i].location);
             }
         }
     });
