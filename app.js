@@ -7,14 +7,24 @@ var app = express()
 mongoose.connect('mongodb://localhost/test')
 var db = mongoose.connection
 
+
+/*
+ * This is the time interval after which the user gets a notification
+ * In production, this would be 1 hour, 45 minutes. Current value is
+ * only for testing purposes.
+ */
 var TIME_INTERVAL = 30000,
     API_KEY = process.env.API_KEY,
     username,
     userSchema,
     userModel
 
+
+/*
+ *  One time database set-up
+ */
 db.once('open', function(callback) {
-    console.log("setting up database");
+    console.log("One time database setup ... ");
     setupDB();
 });
 
@@ -28,6 +38,9 @@ function setupDB() {
 }
 
 
+/*
+ * Express Middleware
+ */
 app.get('/', function(req, res) {
   console.log("A client connected ... ")
   res.send('Server Started')
@@ -43,12 +56,17 @@ app.get('/help', function(req, res) {
 app.get('/yo', function(req, res) {
     username = req.query.username;
     location = req.query.location;
-    console.log("Yo received from " + username);
     res.send("Received a Yo from " + username);
     writeToDb(username, location);
 });
 
 
+/*
+ * Function to send a yo to the specific username
+ * with the given location. If the location was
+ * not specified, the users only get a link to
+ * Google Maps
+ */
 function sendYo(yoUsername, location) {
     if (location)
         location = location.replace(";",",");
@@ -68,7 +86,10 @@ function sendYo(yoUsername, location) {
 }
 
 
-
+/*
+ *  Database Manipulation Functions.
+ *  Read and Write from the database when required.
+ */
 function writeToDb(yoUsername, yoLocation) {
     var user = new userModel({ username : yoUsername, location : yoLocation });
     user.save(function(err, user) {
@@ -88,18 +109,22 @@ function removeFromDb(yoUsername) {
 }
 
 
+/*
+ * Keeps checking the database at regular intervals to see
+ * if any user has been in the database for more than TIME_INTERVAL
+ * and if so, sends them a Yo.
+ */
 function getInfoFromDb() {
     console.log("Reading database...");
     userModel.find(function(err, user) {
         if (err) console.log(err);
         for (i = 0; i < user.length; i++) {
-            if(isTimeUp(user[i].time)) {
+            if (isTimeUp(user[i].time)) {
                 sendYo(user[i].username, user[i].location);
             }
         }
     });
 }
-
 
 function isTimeUp(givenTime) {
     var currentTime = new Date(Date.now());
@@ -109,8 +134,19 @@ function isTimeUp(givenTime) {
 }
 
 
-var intVar = setInterval(getInfoFromDb, 10 * 1000);
+/*
+ *  The getInfoFromDb function is being called repeatedly.
+ *  For testing and debugging purposes, this interval is 10 seconds.
+ *  In production, it would be a lot more.
+ *
+ *  TODO:: Ideal solution would be to get a notification from the
+ *  database that a user's time has expired and then send them a Yo.
+ *  Possibly implement using Firebase (the real-time database).
+ */
+setInterval(getInfoFromDb, 10 * 1000);
+
 
 console.log("Server running ...");
+
 app.listen(process.env.PORT || 3000);
 
