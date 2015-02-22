@@ -8,7 +8,7 @@ mongoose.connect('mongodb://localhost/test')
 var db = mongoose.connection
 
 var TIME_INTERVAL = 30000,
-    API_KEY = "904143ab-b305-45de-ab8f-adf8a925612e",
+    API_KEY = process.env.API_KEY,
     username,
     userSchema,
     userModel
@@ -112,5 +112,5 @@ function isTimeUp(givenTime) {
 var intVar = setInterval(getInfoFromDb, 10 * 1000);
 
 console.log("Server running ...");
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
 
