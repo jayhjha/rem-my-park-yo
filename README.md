@@ -14,4 +14,3 @@ Have fun Yo-ing. :)
 
 
 I am new with Node.js, Express.js, MongoDB and Yo (so, pretty much everything that has been used in this app).
-http://yoapi.justyo.co
