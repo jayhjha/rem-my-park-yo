@@ -12,4 +12,5 @@ Have fun Yo-ing. :)
 
 
 Background::
-I am new with Node.js, Express.js, MongoDB and Yo (so, pretty much everything that has been used in this app).
+I worked on this project at McHacks (McGill University Hackathon). When I started, I had no experience with Express.js, MongoDB and Yo API. I only had a basic idea about Node.js. So, this was not only a hackathon project, but a learning project too. 
+The next apps using MEAN stack (mean.io) will definitely be an improvement on this one.
