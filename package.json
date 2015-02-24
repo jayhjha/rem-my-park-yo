@@ -1,21 +1,29 @@
 {
     "name": "RemMyParkYo",
-    "description": "An express app that sends a Yo to remind you of the time and location of your Car Park",
     "version": "0.1.0",
+    "description": "An express app that sends a Yo to remind you of the time and location of your Car Park",
     "main": "app.js",
-    "engine": {
-        "node": "0.10.32"
+    "scripts": {
+      "start": "node app.js"
     },
-    "private": true,
     "dependencies": {
         "express": "4.x.x",
         "request": "2.53.0",
         "mongoose": "3.8.23"
     },
-    
-    "author": "hijha",
+    "engines": {
+        "node": "0.10.x"
+    },
     "repository": {
         "type": "git",
         "url": "git://github.com/hijha/rem-my-park-yo"
-    }
+    },
+   "keywords": [
+     "node",
+     "heroku",
+     "express",
+     "mongoDB",
+     "Yo"
+   ],  
+   "license": "MIT"
 }
