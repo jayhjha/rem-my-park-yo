@@ -7,7 +7,7 @@ var app = express()
 var MONGO_USER = process.env.MONGO_USER,
     MONGO_PASSWORD = process.env.MONGO_PASSWORD
 
-mongoose.connect('mongodb://MONGO_USER:MONGO_PASSWORD@ds047591.mongolab.com:47591/remmyparkyo');
+mongoose.connect('mongodb://'+MONGO_USER+':'+MONGO_PASSWORD+'@ds047591.mongolab.com:47591/remmyparkyo');
 var db = mongoose.connection
 
 
