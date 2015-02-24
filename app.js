@@ -4,7 +4,10 @@ var express = require('express'),
 
 var app = express()
 
-mongoose.connect('mongodb://localhost/test')
+var MONGO_USER = process.env.MONGO_USER,
+    MONGO_PASSWORD = process.env.MONGO_PASSWORD
+
+mongoose.connect('mongodb://MONGO_USER:MONGO_PASSWORD@ds047591.mongolab.com:47591/remmyparkyo');
 var db = mongoose.connection
 
 

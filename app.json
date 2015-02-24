@@ -1,14 +1,6 @@
 {
   "name": "RemMyParkYo",
   "description": "An express app that sends a Yo to remind you of your parking time and location",
-  "keywords":["Yo", "Node", "Express", "MongoDB"],
-  "website": "https://github.com/hijha/rem-my-park-yo",
   "repository": "https://github.com/hijha/rem-my-park-yo",
-  "success_url": "https://github.com/hijha/rem-my-park-yo/blob/master/README.md",
-  "env": {
-    "API_KEY": {
-      "description": "The API key from a Yo account. Get one from here: http://yoapi.justyo.co",
-      "value": ""
-    }
-  }
+  "keywords":["Yo", "Node", "Express", "MongoDB"],
 }
