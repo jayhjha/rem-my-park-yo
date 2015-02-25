@@ -72,20 +72,22 @@ app.get('/yo', function(req, res) {
  */
 function sendYo(yoUsername, location) {
     if (location)
-        location = location.replace(";",",");
+        location = location.replace(";",",")
 
+    console.log("location = " + location)
     request.post('http://api.justyo.co/yo/',
         { form: { 'api_token': API_KEY,
               'username': yoUsername,
               'link': 'https://www.google.com/maps/search/'+location } },
         function(error, response, body) {
+            console.log("response code = " + response.statusCode);
             if (!error && response.statusCode == 200) {
-                console.log("Yo sent to  " + yoUsername);
-                console.log(body);
+                console.log("Yo sent to  " + yoUsername)
+                console.log(body)
             }
         }
     )
-    removeFromDb(yoUsername);
+    removeFromDb(yoUsername)
 }
 
 
