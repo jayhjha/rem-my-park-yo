@@ -82,10 +82,8 @@ function sendYo(yoUsername, location) {
               'username': yoUsername,
               'link':  link } },
         function(error, response, body) {
-            console.log("response code = " + response.statusCode);
             if (!error && response.statusCode == 200) {
                 console.log("Yo sent to  " + yoUsername)
-                console.log(body)
             }
         }
     )
