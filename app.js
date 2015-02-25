@@ -4,13 +4,6 @@ var express = require('express'),
 
 var app = express()
 
-var MONGO_USER = process.env.MONGO_USER,
-    MONGO_PASSWORD = process.env.MONGO_PASSWORD
-
-mongoose.connect('mongodb://'+MONGO_USER+':'+MONGO_PASSWORD+'@ds047591.mongolab.com:47591/remmyparkyo');
-var db = mongoose.connection
-
-
 /*
  * This is the time interval after which the user gets a notification
  * In production, this would be 1 hour, 45 minutes. Current value is
@@ -21,6 +14,11 @@ var TIME_INTERVAL = 30000,
     username,
     userSchema,
     userModel
+    MONGO_USER = process.env.MONGO_USER,
+    MONGO_PASSWORD = process.env.MONGO_PASSWORD
+
+mongoose.connect('mongodb://'+MONGO_USER+':'+MONGO_PASSWORD+'@ds047591.mongolab.com:47591/remmyparkyo');
+var db = mongoose.connection
 
 
 /*
@@ -71,14 +69,18 @@ app.get('/yo', function(req, res) {
  * Google Maps
  */
 function sendYo(yoUsername, location) {
-    if (location)
+    var link
+    if (location) {
         location = location.replace(";",",")
+        link = 'https://www.google.com/maps/search/'+location
+    } else {
+        link = 'https://www.google.com/'
+    }
 
-    console.log("location = " + location)
     request.post('http://api.justyo.co/yo/',
         { form: { 'api_token': API_KEY,
               'username': yoUsername,
-              'link': 'https://www.google.com/maps/search/'+location } },
+              'link':  link } },
         function(error, response, body) {
             console.log("response code = " + response.statusCode);
             if (!error && response.statusCode == 200) {
@@ -154,4 +156,3 @@ setInterval(getInfoFromDb, 10 * 1000);
 console.log("Server running ...");
 
 app.listen(process.env.PORT || 3000);
-
